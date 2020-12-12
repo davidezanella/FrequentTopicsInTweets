@@ -46,9 +46,9 @@ def main(filename, words):
         legend = words[0]
         if i > 0:
             legend = r"({}) $\rightarrow$ {}".format(', '.join(words[:i]), words[i])
-        ax1.plot(x, y, label=legend)
+        p = ax1.plot(x, y, label=legend)
         if i > 0:
-            ax2.plot(x, y_int, '--', label=legend)
+            ax2.plot(x, y_int, '--', label=legend, color=p[0].get_color())
 
     fig.suptitle('Correlation ({})'.format(', '.join(words)))
     ax1.legend()
