@@ -30,6 +30,7 @@ def main(filename, words):
     ax1.set_ylabel('# appearances in tweets')
     ax2.set_xlabel('Days')
     ax2.set_ylabel('Interest value')
+    plt.xticks(rotation=20)
 
     for i in range(len(words)):
         x, y, y_int = [], [], []
