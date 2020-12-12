@@ -4,9 +4,8 @@ import matplotlib.pyplot as plt
 
 
 class BasketWorker:
-    def __init__(self, basket, max_deep, min_interest):
+    def __init__(self, basket, min_interest):
         self.basket = basket
-        self.max_deep = max_deep
         self.min_interest = min_interest
         self.count = {}
 
@@ -17,7 +16,7 @@ class BasketWorker:
 
         all_counts = {}
         deep = 1
-        while deep <= self.max_deep:
+        while True:
             tuple_count, allowed_words, tweets_idx = self.count_deeply(allowed_words, deep, tweets_idx, tuple_count)
             all_counts.update(tuple_count)
             if len(tuple_count.keys()) == 0:
@@ -55,7 +54,7 @@ class BasketWorker:
         if len(self.count) > 0:
             support_threshold = self.get_min_support()
 
-        # remove keys with support less than s
+        # remove keys with support less than support_threshold
         for key, status in list(self.count.items()):
             if status.support < support_threshold:
                 del self.count[key]
@@ -88,7 +87,7 @@ class BasketWorker:
         wall = self.clustering(supports)
 
         # to remove avoid keeping only outliers
-        if wall > len(supports) * 99 / 100:
+        if len(supports[wall:]) < 3:
             wall = self.clustering(supports[:wall])
 
         min_support = supports[wall]
