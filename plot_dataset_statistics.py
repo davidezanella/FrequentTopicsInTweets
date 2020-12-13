@@ -8,6 +8,7 @@ def count_on_dataset(filename):
     count_days = {}
     count_hours = {}
     count_words = {}
+    lines = 0
 
     with open(filename) as csvfile:
         reader = csv.DictReader(csvfile)
@@ -21,6 +22,9 @@ def count_on_dataset(filename):
             count_days[day] = count_days.get(day, 0) + 1
             count_hours[hour] = count_hours.get(hour, 0) + 1
             count_words[n_words] = count_words.get(n_words, 0) + 1
+
+            lines += 1
+    print("Number of tweets:", lines)
     return count_days, count_hours, count_words
 
 
