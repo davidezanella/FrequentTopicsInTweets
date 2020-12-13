@@ -1,0 +1,5 @@
+matplotlib==3.3.3
+nltk==3.5
+csvsort==1.6.1
+tqdm==4.54.1
+numpy==1.19.4
