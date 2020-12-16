@@ -42,6 +42,8 @@ def main(filename):
     plt.xlabel('Days')
     plt.ylabel('# of tweets')
     plt.title('Number of tweets per day')
+    plt.xticks(rotation=25)
+    plt.tight_layout()
 
     plt.show()
 
@@ -51,6 +53,8 @@ def main(filename):
     plt.ylabel('# of tweets')
     plt.title('Number of tweets per hour')
 
+    plt.gcf().axes[0].yaxis.get_major_formatter().set_scientific(False)
+
     plt.show()
 
     plt.bar(count_words.keys(), count_words.values())
@@ -58,6 +62,8 @@ def main(filename):
     plt.xlabel('# of words')
     plt.ylabel('# of tweets')
     plt.title('Number of words in tweets')
+
+    plt.gcf().axes[0].yaxis.get_major_formatter().set_scientific(False)
 
     plt.show()
 
