@@ -4,6 +4,7 @@ from multiprocessing import Pool, cpu_count
 import functools
 from tqdm import tqdm
 import argparse
+import json
 
 from src.elaborate_baskets import BasketWorker
 from src.binary_search import load_subset_dataset, min_and_max_dates_dataset
@@ -46,6 +47,22 @@ def main(filename, min_interest):
     print(f'elapsed time: {end - start}')
 
     most_freq = find_frequency_in_time(res)
+    most_freq = list(filter(lambda x: len(x[0]) > 1, most_freq))
+
+    results = {
+        'dataset': filename,
+        'min_interest': min_interest,
+        'time': end - start,
+        'results': [{
+            'set': val[0],
+            'days_of_popularity': val[1][0],
+            'mean_interest': val[1][1]/val[1][0]
+        } for val in most_freq]
+    }
+
+    with open(filename + '_results.json', 'w') as outfile:
+        json.dump(results, outfile)
+
     for i, val in enumerate(most_freq[:20]):
         print('{} -> {}, days of popularity: {}, mean interest: {}'.format(i+1, val[0], val[1][0], val[1][1]/val[1][0]))
 
