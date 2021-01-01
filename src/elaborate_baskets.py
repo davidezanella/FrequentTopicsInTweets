@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 
 
 class BasketWorker:
-    def __init__(self, basket, min_interest):
+    def __init__(self, basket, min_confidence):
         self.basket = basket
-        self.min_interest = min_interest
+        self.min_confidence = min_confidence
         self.count = {}
 
     def __call__(self, *args, **kwargs):
@@ -60,21 +60,12 @@ class BasketWorker:
                 del self.count[key]
 
         if len(old_count) > 0:
-            # compute the interest of every association
+            # compute the confidence of every association
             for key, status in list(self.count.items()):
                 i = key[:-1]
-                status.interest = (status.support / old_count[i].support)
-                if status.interest < self.min_interest:
+                status.confidence = (status.support / old_count[i].support)
+                if status.confidence < self.min_confidence:
                     del self.count[key]
-
-            interests = sorted(self.count.items(), key=lambda x: x[1].interest, reverse=True)
-        else:
-            interests = sorted(self.count.items(), key=lambda x: x[1].support, reverse=True)
-
-        # print("Process:", os.getpid())
-        # print("Deep:", deep)
-        # print("Length:", len(self.count.keys()))
-        # print("Top 5 interests:", [(i[0], i[1].support, i[1].interest) for i in interests[:5]])
 
         all_words = set([word for key in self.count.keys() for word in key])
         tweets_idx = set([idx for val in self.count.values() for idx in val.rows])
@@ -86,7 +77,7 @@ class BasketWorker:
         supports = list(sorted(supports))
         wall = self.clustering(supports)
 
-        # to remove avoid keeping only outliers
+        # to avoid keeping only outliers
         if len(supports[wall:]) < 3:
             wall = self.clustering(supports[:wall])
 
@@ -112,12 +103,12 @@ class BasketWorker:
 
 
 class SetStatus:
-    __slots__ = ['support', 'rows', 'interest']
+    __slots__ = ['support', 'rows', 'confidence']
 
     def __init__(self):
         self.support = 0
         self.rows = []
-        self.interest = 0
+        self.confidence = 0
 
     def __str__(self):
-        return '{} - {}'.format(self.support, self.interest)
+        return '{} - {}'.format(self.support, self.confidence)
