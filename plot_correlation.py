@@ -29,7 +29,7 @@ def main(filename, words):
     ax1.set_xlabel('Days')
     ax1.set_ylabel('# appearances in tweets')
     ax2.set_xlabel('Days')
-    ax2.set_ylabel('Interest value')
+    ax2.set_ylabel('Confidence value')
     plt.xticks(rotation=20)
 
     for i in range(len(words)):
