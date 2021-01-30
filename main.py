@@ -16,18 +16,23 @@ def start_process(filename, min_confidence, day):
     return worker()
 
 
-def find_frequency_in_time(baskets_result):
+def find_frequency_in_time(baskets_result, days_support):
     count = {}
     for basket in baskets_result:
         for key in basket.keys():
             val = count.get(key, (0, 0))
             count[key] = (val[0] + 1, val[1] + basket[key].confidence)
 
+    # remove keys below the days support value
+    for key, value in list(count.items()):
+        if value[0] < days_support:
+            del count[key]
+
     count = sorted(count.items(), key=lambda x: x[1][1]/x[1][0], reverse=True)
     return count
 
 
-def main(filename, min_confidence):
+def main(filename, min_confidence, days_support):
     first_day, last_day = min_and_max_dates_dataset(filename)
     num_days = (last_day.date() - first_day.date()).days + 1
     date_list = [first_day + timedelta(days=x) for x in range(num_days)]
@@ -46,7 +51,7 @@ def main(filename, min_confidence):
     end = timer()
     print(f'elapsed time: {end - start}')
 
-    most_freq = find_frequency_in_time(res)
+    most_freq = find_frequency_in_time(res, days_support)
     most_freq = list(filter(lambda x: len(x[0]) > 1, most_freq))
 
     results = {
@@ -73,6 +78,8 @@ if __name__ == '__main__':
                         help='the sorted dataset file to work on')
     parser.add_argument('--min_confidence', type=float, default=0.7,
                         help='minimum value of confidence to be considered [0,1]')
+    parser.add_argument('--days_support', type=int, default=1,
+                        help='minimum number of days support value')
 
     args = parser.parse_args()
-    main(args.dataset, args.min_confidence)
+    main(args.dataset, args.min_confidence, args.days_support)
