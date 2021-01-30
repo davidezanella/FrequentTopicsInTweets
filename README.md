@@ -12,6 +12,20 @@ To launch the program execute the `main.py` script as follows:
 ```shell
 python3 main.py test_dataset.csv
 ```
+To see all the available parameters use the `--help` command:
+```shell
+usage: main.py [-h] [--min_confidence MIN_CONFIDENCE] [--days_support DAYS_SUPPORT] dataset
+
+positional arguments:
+  dataset               the sorted dataset file to work on
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --min_confidence MIN_CONFIDENCE
+                        minimum value of confidence to be considered [0,1]
+  --days_support DAYS_SUPPORT
+                        minimum number of days support value
+```
 
 The other scripts are described below:
 * `create_dataset.py`: using a raw dataset as input creates a new one cleaning it and sorting by dates;
